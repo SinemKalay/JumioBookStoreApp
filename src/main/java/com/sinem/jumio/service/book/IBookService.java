@@ -12,11 +12,11 @@ public interface IBookService
 
     BookDTO find(Long bookId) throws EntityNotFoundException;
 
-    BookDO findBookDO(Long bookId);
+    BookDO findBookDO(Long bookId) throws EntityNotFoundException;
 
-    BookDTO create(BookDTO bookDTO) throws ConstraintsViolationException;
+    BookDTO create(BookDTO bookDTO)throws ConstraintsViolationException;
 
-    void delete(Long bookId);
+    void delete(Long bookId) throws EntityNotFoundException;
 
     void update(BookDTO bookDTO);
 

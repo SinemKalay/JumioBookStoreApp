@@ -1,11 +1,9 @@
 package com.sinem.jumio.domainObject;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.ZonedDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.Nullable;
 
 @Entity
 @Table(
@@ -35,7 +32,7 @@ public class BookDO
     private String isbn;
 
     @Column(nullable = false)
-    @NotNull(message = "ISBN can not be null!")
+    @NotNull(message = "Title can not be null!")
     private String title;
 
     @Column(nullable = false)
@@ -43,12 +40,12 @@ public class BookDO
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "Author_ID")
-    @JsonBackReference
-    @Nullable
+    @NotNull(message = "Author information can not be null! First need to create Author..")
     private AuthorDO authorDO;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "stock_ID")
+    @NotNull(message = "Stock information can not be null!")
     private StockDO stockDO;
 
     @Column(nullable = false)
@@ -62,19 +59,31 @@ public class BookDO
     }
 
 
-    public BookDO(Long id,String isbn, String title, AuthorDO authorDO)
+    public BookDO(Long id, String isbn, String title, AuthorDO authorDO)
     {
-        this.id=id;
+        this.id = id;
         this.isbn = isbn;
         this.title = title;
         this.authorDO = authorDO;
+        //        this.stockDO=stockDO;
+        this.deleted = false;
+    }
+
+
+    public BookDO(Long id, String isbn, String title, AuthorDO authorDO, StockDO stockDO)
+    {
+        this.id = id;
+        this.isbn = isbn;
+        this.title = title;
+        this.authorDO = authorDO;
+        this.stockDO = stockDO;
         this.deleted = false;
     }
 
 
     public BookDO(Long id, String isbn, String title)
     {
-        this.id=id;
+        this.id = id;
         this.isbn = isbn;
         this.title = title;
         this.deleted = false;
@@ -105,10 +114,16 @@ public class BookDO
     }
 
 
-    public String getTitle()   {       return title;   }
+    public String getTitle()
+    {
+        return title;
+    }
 
 
-    public void setTitle(String title)   {       this.title = title;   }
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
 
     public ZonedDateTime getDateCreated()

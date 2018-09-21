@@ -4,21 +4,33 @@ import com.sinem.jumio.dataTransferObject.BookDTO;
 import com.sinem.jumio.domainObject.BookDO;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BookMapper
 {
     public static BookDO makeBookDO(BookDTO bookDTO)
     {
-        if(bookDTO.getAuthorDTO()==null){
-            return new BookDO(bookDTO.getId(),bookDTO.getIsbn(), bookDTO.getTitle());
+        if (bookDTO.getStockDTO() == null)
+        {
+            return new BookDO(
+                bookDTO.getId(),
+                bookDTO.getIsbn(),
+                bookDTO.getTitle(),
+                AuthorMapper.makeAuthorDO(bookDTO.getAuthorDTO()));
         }
-        else{
-            return new BookDO(bookDTO.getId(),bookDTO.getIsbn(), bookDTO.getTitle(), AuthorMapper.makeAuthorDO(bookDTO.getAuthorDTO()));
+        else
+        {
+            return new BookDO(
+                bookDTO.getId(),
+                bookDTO.getIsbn(),
+                bookDTO.getTitle(),
+                AuthorMapper.makeAuthorDO(bookDTO.getAuthorDTO()),
+                StockMapper.makeStockDO(bookDTO.getStockDTO()));
+
         }
 
     }
+
 
     public static BookDTO makeBookDTO(BookDO bookDO)
     {
@@ -26,11 +38,12 @@ public class BookMapper
             .setId(bookDO.getId())
             .setTitle(bookDO.getTitle())
             .setIsbn(bookDO.getIsbn())
-            .setAuthorDTO(AuthorMapper.makeAuthorDTO(bookDO.getAuthorDO()));
-
+            .setAuthorDTO(AuthorMapper.makeAuthorDTO(bookDO.getAuthorDO()))
+            .setStockDTO(StockMapper.makeStockDTO(bookDO.getStockDO()));
 
         return bookDTOBuilder.createBookDTO();
     }
+
 
     public static List<BookDTO> makeBookDTOList(Collection<BookDO> bookList)
     {

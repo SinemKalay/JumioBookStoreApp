@@ -3,6 +3,7 @@ package com.sinem.jumio.service.order;
 import com.sinem.jumio.dataAccessObject.OrderRepository;
 import com.sinem.jumio.dataTransferObject.OrderDTO;
 import com.sinem.jumio.dataTransferObject.OrderItemDTO;
+import com.sinem.jumio.domainObject.BookDO;
 import com.sinem.jumio.domainObject.OrderDO;
 import com.sinem.jumio.domainObject.OrderItemDO;
 import com.sinem.jumio.domainValue.OrderStatus;
@@ -188,8 +189,19 @@ public class OrderService implements IOrderService
 
         OrderDO orderDO = OrderMapper.makeOrderDO(orderDTO);
 
+
         Function<OrderItemDO, OrderItemDO> functionSetBookDODetails = (OrderItemDO orderItem) -> {
-            orderItem.setBookDO(iBookService.findBookDO(orderItem.getBookDO().getId()));
+
+            try
+            {
+                BookDO bookDO=iBookService.findBookDO(orderItem.getBookDO().getId());
+                orderItem.setBookDO(bookDO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
             return orderItem;
         };
 

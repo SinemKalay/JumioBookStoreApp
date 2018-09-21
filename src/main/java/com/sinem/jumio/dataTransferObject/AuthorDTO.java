@@ -21,12 +21,17 @@ public class AuthorDTO
 
     }
 
+    private AuthorDTO(Long id, String firstName, String lastName)
+    {
+        this.id=id;
+        this.firstName = firstName;
+        this.lastName=lastName;
+    }
 
-    private AuthorDTO(String firstName, String lastName, Set<BookDO> booksOfAuthor)
+    private AuthorDTO(String firstName, String lastName)
     {
         this.firstName = firstName;
         this.lastName=lastName;
-        this.booksOfAuthor = booksOfAuthor;
     }
 
 
@@ -95,7 +100,7 @@ public class AuthorDTO
 
         public AuthorDTO createAuthorDTO()
         {
-            return new AuthorDTO(this.firstName, this.lastName, this.booksOfAuthor);
+            return new AuthorDTO(this.firstName, this.lastName);
         }
     }
 }

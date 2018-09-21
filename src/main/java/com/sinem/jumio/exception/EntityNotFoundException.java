@@ -7,11 +7,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class EntityNotFoundException extends Exception
 {
     static final long serialVersionUID = -3387516993334229948L;
+    private String message;
 
 
     public EntityNotFoundException(String message)
     {
         super(message);
+        this.message = message;
+
     }
 
+
+    @Override
+    public String getMessage()
+    {
+        return message;
+    }
 }

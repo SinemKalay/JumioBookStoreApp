@@ -26,15 +26,15 @@ INSERT INTO author (id, first_name, last_name, deleted, date_created) VALUES (3,
 
 -- Create 3 books
 INSERT INTO book (id, isbn, title, deleted, Author_ID, date_created, stock_ID)
-VALUES (1, '12sddf3q3464545', 'On The Road',
+VALUES (1, '978-1-4028-9462-6', 'On The Road',
         FALSE, 1, now(), 1);
 
-INSERT INTO book (id, isbn, title, deleted, Author_ID, date_created, stock_ID) VALUES (2, 'asfaef23214fdf', '1984',
-                                                                                       FALSE, 1, now(), 2);
+INSERT INTO book (id, isbn, title, deleted, Author_ID, date_created, stock_ID) VALUES (2, '1-4028-9462-7', '1984',
+                                                                                       FALSE, 2, now(), 2);
 
-INSERT INTO book (id, isbn, title, deleted, Author_ID, date_created, stock_ID) VALUES (3, 'gnymyum45345yg', 'The ' ||
+INSERT INTO book (id, isbn, title, deleted, Author_ID, date_created, stock_ID) VALUES (3, '978-1-56619-909-4', 'The ' ||
                                                                                                             'Outsider',
-                                                                                       FALSE, 1, now(), 3);
+                                                                                       FALSE, 3, now(), 3);
 
 -- Create 6 Orders
 INSERT INTO orders (id, order_status, Customer_ID, date_created, deleted) VALUES (1, 'CREATED', 1, now(),

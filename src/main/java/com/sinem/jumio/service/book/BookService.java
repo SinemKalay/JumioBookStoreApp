@@ -2,9 +2,11 @@ package com.sinem.jumio.service.book;
 
 import com.sinem.jumio.dataAccessObject.BookRepository;
 import com.sinem.jumio.dataTransferObject.BookDTO;
+import com.sinem.jumio.domainObject.AuthorDO;
 import com.sinem.jumio.domainObject.BookDO;
 import com.sinem.jumio.exception.ConstraintsViolationException;
 import com.sinem.jumio.exception.EntityNotFoundException;
+import com.sinem.jumio.service.author.IAuthorService;
 import com.sinem.jumio.specification.BookSpecification;
 import com.sinem.jumio.util.mapper.BookMapper;
 import java.util.List;
@@ -22,6 +24,9 @@ public class BookService implements IBookService
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private IAuthorService iAuthorService;
 
 
     /**
@@ -43,7 +48,7 @@ public class BookService implements IBookService
      * @return bookDTO
      */
     @Override
-    public BookDTO find(Long bookId)
+    public BookDTO find(Long bookId) throws EntityNotFoundException
     {
         return BookMapper.makeBookDTO(findBookDO(bookId));
     }
@@ -57,20 +62,12 @@ public class BookService implements IBookService
      * @throws EntityNotFoundException if no book with the given id was found.
      */
     @Override
-    public BookDO findBookDO(Long bookId)
+    public BookDO findBookDO(Long bookId) throws EntityNotFoundException
     {
-        BookDO bookDO = null;
-        try
-        {
-            bookDO = bookRepository.findByIdAndDeleted(bookId, false)
-                .orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + bookId));
-            LOG.info("Book found with received bookId:" + bookId);
-        }
-        catch (EntityNotFoundException e)
-        {
-            LOG.warn("Book NOT found with received bookId:" + bookId);
-            e.printStackTrace();
-        }
+        BookDO bookDO = bookRepository.findByIdAndDeleted(bookId, false)
+            .orElseThrow(() -> new EntityNotFoundException("Book NOT found with received bookId:" + bookId));
+        LOG.info("Book found with received bookId:" + bookId);
+
         return bookDO;
     }
 
@@ -89,13 +86,14 @@ public class BookService implements IBookService
         try
         {
             BookDO bookDO = BookMapper.makeBookDO(bookDTO);
+            checkParentFields(bookDO);
             return BookMapper.makeBookDTO(bookRepository.save(bookDO));
 
         }
         catch (DataIntegrityViolationException e)
         {
-            LOG.warn("Some constraints are violated due to car creation", e);
-            throw new ConstraintsViolationException(e.getMessage());
+            LOG.warn("Some constraints are violated due to book creation", e);
+            throw new ConstraintsViolationException("Please check Book parameter which you entered!");
         }
     }
 
@@ -108,7 +106,7 @@ public class BookService implements IBookService
      */
     @Override
     @Transactional
-    public void delete(Long bookId)
+    public void delete(Long bookId) throws EntityNotFoundException
     {
         BookDO bookDO = findBookDO(bookId);
         bookDO.setDeleted(true);
@@ -168,5 +166,30 @@ public class BookService implements IBookService
             .orElseThrow(() -> new EntityNotFoundException("Could not find any book"));
     }
 
+
+    private void checkParentFields(BookDO bookDO)
+    {
+        AuthorDO authorDO;
+        try
+        {
+            if (bookDO.getAuthorDO().getId() == null)
+            {
+                authorDO = iAuthorService.findAuthorDOByName(bookDO.getAuthorDO().getFirstName(), bookDO.getAuthorDO().getLastName());
+            }
+            else
+            {
+                authorDO = iAuthorService.findAuthorDOById(bookDO.getAuthorDO().getId());
+            }
+            bookDO.setAuthorDO(authorDO);
+
+        }
+        catch (EntityNotFoundException e)
+        {
+            LOG.warn("Could not find author with firstname: " + bookDO.getAuthorDO().getFirstName() + " and lastname " + bookDO.getAuthorDO().getLastName());
+            e.printStackTrace();
+        }
+
+
+    }
 
 }

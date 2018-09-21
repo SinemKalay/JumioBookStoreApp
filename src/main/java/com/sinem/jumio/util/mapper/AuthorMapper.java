@@ -7,7 +7,7 @@ public class AuthorMapper
 {
     public static AuthorDO makeAuthorDO(AuthorDTO authorDTO)
     {
-        return new AuthorDO(authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getBooksOfAuthor());
+        return new AuthorDO(authorDTO.getFirstName(), authorDTO.getLastName());
     }
 
 
@@ -16,8 +16,8 @@ public class AuthorMapper
         AuthorDTO.AuthorDTOBuilder authorDTOBuilder = AuthorDTO.newBuilder()
             .setId(authorDO.getId())
             .setFirstName(authorDO.getFirstName())
-            .setLastName(authorDO.getLastName())
-            .setBooksOfAuthor(authorDO.getBookOfAuthor());
+            .setLastName(authorDO.getLastName());
+//            .setBooksOfAuthor(authorDO.getBookOfAuthor());
 
         return authorDTOBuilder.createAuthorDTO();
     }

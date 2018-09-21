@@ -4,9 +4,8 @@ import com.sinem.jumio.dataTransferObject.BookDTO;
 import com.sinem.jumio.exception.ConstraintsViolationException;
 import com.sinem.jumio.exception.EntityNotFoundException;
 import com.sinem.jumio.service.book.IBookService;
-import com.sinem.jumio.util.mapper.BookMapper;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,14 +59,19 @@ public class BookController
 
 
     @PostMapping()
-    public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) throws ConstraintsViolationException
+    public ResponseEntity<Object> createBook(@Valid @RequestBody BookDTO bookDTO) throws ConstraintsViolationException
     {
-        return new ResponseEntity<>(iBookService.create(bookDTO), HttpStatus.OK);
+        if (bookDTO != null)
+        {
+            return new ResponseEntity<>(iBookService.create(bookDTO), HttpStatus.OK);
+
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
 
     @DeleteMapping("/{bookId}")
-    public ResponseEntity<BookDTO> deleteBook(@Valid @PathVariable Long bookId)
+    public ResponseEntity<BookDTO> deleteBook(@Valid @PathVariable Long bookId) throws EntityNotFoundException
     {
         iBookService.delete(bookId);
         return new ResponseEntity(HttpStatus.OK);
@@ -75,13 +79,19 @@ public class BookController
 
 
     @PatchMapping()
-    public void updateBook(@Valid @RequestBody BookDTO bookDTO)
+    public ResponseEntity<Object> updateBook(@Valid @RequestBody BookDTO bookDTO)
     {
         iBookService.update(bookDTO);
+
+        return ResponseEntity.ok(new HashMap<String, String>()
+        {{
+            put("message", bookDTO.getId() + " has been updated  ");
+        }});
     }
 
+
     @PostMapping("/search")
-    public ResponseEntity<List<BookDTO>> advanceSearchBook(@RequestBody BookDTO bookDTO) throws EntityNotFoundException
+    public ResponseEntity<List<BookDTO>> advanceSearchBook(@Valid @RequestBody BookDTO bookDTO) throws EntityNotFoundException
     {
         List<BookDTO> bookDTOList = iBookService.advanceSearchBook(bookDTO);
         return new ResponseEntity<>(bookDTOList, HttpStatus.OK);

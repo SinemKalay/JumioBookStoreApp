@@ -10,7 +10,7 @@ public class StockMapper
 {
     public static StockDO makeStockDO(StockDTO stockDTO)
     {
-        return new StockDO(stockDTO.getNumberInStock(), BookMapper.makeBookDO(stockDTO.getBookDTO()));
+        return new StockDO(stockDTO.getNumberInStock());
     }
 
 
@@ -18,7 +18,7 @@ public class StockMapper
     {
         StockDTO.StockDTOBuilder stockDTOBuilder = StockDTO.newBuilder()
             .setId(stockDO.getId())
-            .setBookDTO(BookMapper.makeBookDTO(stockDO.getBookDO()))
+            //.setBookDTO(BookMapper.makeBookDTO(stockDO.getBookDO()))
             .setNumberInStock(stockDO.getNumberOfCopy());
 
         return stockDTOBuilder.createStockDTO();

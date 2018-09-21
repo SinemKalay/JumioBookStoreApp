@@ -15,14 +15,14 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class BookSpecification implements Specification<BookDO>
 {
-    private BookDO bookDO;
+    private BookDTO bookDTO;
     private List<Predicate> predicates = new ArrayList<Predicate>();
 
 
     public BookSpecification(BookDTO bookDTO)
     {
         super();
-        this.bookDO = BookMapper.makeBookDO(bookDTO);
+        this.bookDTO = bookDTO;
 
     }
 
@@ -31,7 +31,7 @@ public class BookSpecification implements Specification<BookDO>
     public Predicate toPredicate(Root<BookDO> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
     {
 
-        if (bookDO != null)
+        if (bookDTO != null)
         {
 
             addIsbnPrediction(root, criteriaBuilder);
@@ -48,18 +48,18 @@ public class BookSpecification implements Specification<BookDO>
 
     private void addIsbnPrediction(Root<BookDO> root, CriteriaBuilder criteriaBuilder)
     {
-        if (bookDO.getIsbn() != null)
+        if (bookDTO.getIsbn() != null)
         {
-            Predicate isbnPre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_ISBN), bookDO.getIsbn());
+            Predicate isbnPre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_ISBN), bookDTO.getIsbn());
             predicates.add(isbnPre);
         }
     }
 
     private void addTitlePrediction(Root<BookDO> root, CriteriaBuilder criteriaBuilder)
     {
-        if (bookDO.getTitle() != null)
+        if (bookDTO.getTitle() != null)
         {
-            Predicate isbnPre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_TITLE), bookDO.getIsbn());
+            Predicate isbnPre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_TITLE), bookDTO.getIsbn());
             predicates.add(isbnPre);
         }
     }
@@ -67,17 +67,17 @@ public class BookSpecification implements Specification<BookDO>
     private void addAuthorPrediction(CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)
     {
 
-        if (bookDO.getAuthorDO() != null)
+        if (bookDTO.getAuthorDTO() != null)
         {
             Root<AuthorDO> root = criteriaQuery.from(AuthorDO.class);
-            if (bookDO.getAuthorDO().getFirstName() != null)
+            if (bookDTO.getAuthorDTO().getFirstName() != null)
             {
-                Predicate autFNamePre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_AUTHOR_FIRST_NAME), bookDO.getAuthorDO().getFirstName());
+                Predicate autFNamePre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_AUTHOR_FIRST_NAME), bookDTO.getAuthorDTO().getFirstName());
                 predicates.add(autFNamePre);
             }
-            if (bookDO.getAuthorDO().getLastName() != null)
+            if (bookDTO.getAuthorDTO().getLastName() != null)
             {
-                Predicate autFNamePre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_AUTHOR_LAST_NAME), bookDO.getAuthorDO().getLastName());
+                Predicate autFNamePre = criteriaBuilder.equal(root.get(StaticValues.COLUMN_AUTHOR_LAST_NAME), bookDTO.getAuthorDTO().getLastName());
                 predicates.add(autFNamePre);
             }
         }

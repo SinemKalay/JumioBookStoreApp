@@ -13,6 +13,8 @@ public class BookDTO
 
     private AuthorDTO authorDTO;
 
+    private StockDTO stockDTO;
+
 
     private BookDTO()
     {
@@ -20,12 +22,13 @@ public class BookDTO
     }
 
 
-    private BookDTO(Long id, String isbn, String title, AuthorDTO authorDTO)
+    private BookDTO(Long id, String isbn, String title, AuthorDTO authorDTO, StockDTO stockDTO)
     {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
         this.authorDTO = authorDTO;
+        this.stockDTO = stockDTO;
     }
 
 
@@ -47,12 +50,21 @@ public class BookDTO
     }
 
 
-    public String getTitle() { return title; }
+    public String getTitle()
+    {
+        return title;
+    }
 
 
     public AuthorDTO getAuthorDTO()
     {
         return authorDTO;
+    }
+
+
+    public StockDTO getStockDTO()
+    {
+        return stockDTO;
     }
 
 
@@ -62,6 +74,7 @@ public class BookDTO
         private String isbn;
         private String title;
         private AuthorDTO authorDTO;
+        private StockDTO stockDTO;
 
 
         public BookDTOBuilder setId(Long id)
@@ -77,6 +90,7 @@ public class BookDTO
             return this;
         }
 
+
         public BookDTOBuilder setTitle(String title)
         {
             this.title = title;
@@ -90,10 +104,16 @@ public class BookDTO
             return this;
         }
 
+        public BookDTOBuilder setStockDTO(StockDTO stockDTO)
+        {
+            this.stockDTO = stockDTO;
+            return this;
+        }
+
 
         public BookDTO createBookDTO()
         {
-            return new BookDTO(id, isbn, title, authorDTO);
+            return new BookDTO(id, isbn, title, authorDTO,stockDTO);
         }
     }
 }

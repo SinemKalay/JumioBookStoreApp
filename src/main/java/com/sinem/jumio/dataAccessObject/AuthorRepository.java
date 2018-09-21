@@ -9,4 +9,8 @@ public interface AuthorRepository extends CrudRepository<AuthorDO,Long>, JpaSpec
 {
     Optional<AuthorDO> findByIdAndDeleted(Long authorId, Boolean deleted);
 
+    Optional<AuthorDO> findByFirstNameAndLastNameAndDeleted(String firstName, String lastName, Boolean deleted);
+
+
+
 }

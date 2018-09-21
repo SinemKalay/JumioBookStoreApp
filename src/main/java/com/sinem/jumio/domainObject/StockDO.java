@@ -35,6 +35,17 @@ public class StockDO
 
     }
 
+    public StockDO(Integer numberOfCopy)
+    {
+        this.numberOfCopy = numberOfCopy;
+    }
+
+
+    public StockDO(Long id,Integer numberOfCopy)
+    {
+        this.id=id;
+        this.numberOfCopy = numberOfCopy;
+    }
 
     public StockDO(Integer numberOfCopy, BookDO bookDO)
     {

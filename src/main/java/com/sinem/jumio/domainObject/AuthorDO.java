@@ -3,6 +3,7 @@ package com.sinem.jumio.domainObject;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.ZonedDateTime;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,8 +38,8 @@ public class AuthorDO
     @Column(nullable = false)
     private Boolean deleted = false;
 
-    @OneToMany
-    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.PERSIST)
+//    @JsonManagedReference
     private Set<BookDO> bookOfAuthor;
 
 
@@ -47,12 +48,21 @@ public class AuthorDO
 
     }
 
+    public AuthorDO(Long id,String firstName, String lastName)
+    {
+        this.id=id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        //        this.bookOfAuthor = bookOfAuthor;
+        this.deleted = false;
+    }
 
-    public AuthorDO(String firstName, String lastName, Set<BookDO> bookOfAuthor)
+
+    public AuthorDO(String firstName, String lastName)
     {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.bookOfAuthor = bookOfAuthor;
+//        this.bookOfAuthor = bookOfAuthor;
         this.deleted = false;
     }
 
